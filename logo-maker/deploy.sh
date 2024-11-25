@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit on error
+set -e
+
 # Update system
 apt update
 apt upgrade -y
@@ -14,19 +17,26 @@ source venv/bin/activate
 # Install Python dependencies
 pip install -r requirements.txt
 
+# Ensure correct permissions
+chown -R www-data:www-data /root/logo-maker
+chmod -R 755 /root/logo-maker
+
 # Setup Gunicorn service
 cp gunicorn.service /etc/systemd/system/
+systemctl daemon-reload
 systemctl start gunicorn
 systemctl enable gunicorn
 
 # Setup Nginx
 cp logo-maker.nginx /etc/nginx/sites-available/logo-maker
-ln -s /etc/nginx/sites-available/logo-maker /etc/nginx/sites-enabled
-rm /etc/nginx/sites-enabled/default
+ln -sf /etc/nginx/sites-available/logo-maker /etc/nginx/sites-enabled
+rm -f /etc/nginx/sites-enabled/default
+nginx -t  # Test configuration
 systemctl restart nginx
 
 # Setup firewall
+ufw allow OpenSSH
 ufw allow 'Nginx Full'
-ufw enable
+ufw --force enable
 
 echo "Deployment complete!" 

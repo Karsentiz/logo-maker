@@ -9,5 +9,7 @@ server {
 
     location /static {
         alias /root/logo-maker/static;
+        expires 30d;
+        add_header Cache-Control "public, no-transform";
     }
 } 
