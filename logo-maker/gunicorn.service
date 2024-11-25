@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve IconicInk
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/root/logo-maker
+Environment="PATH=/root/logo-maker/venv/bin"
+ExecStart=/root/logo-maker/venv/bin/gunicorn --workers 3 --bind unix:logo-maker.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target 

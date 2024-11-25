@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IconicInk - AI Logo Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="IconicInk Logo">
+                <span class="logo-text">IconicInk</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Transform Your Brand with AI-Powered Logo Design</h1>
+            <p class="hero-text">Create unique, professional logos in seconds using our advanced AI technology. Perfect for businesses, startups, and personal brands.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🎨</div>
+                <h3>Custom Design</h3>
+                <p>Tailored to your brand's unique identity</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Instant Creation</h3>
+                <p>Generate your logo in seconds</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💡</div>
+                <h3>AI-Powered</h3>
+                <p>Cutting-edge technology for modern designs</p>
+            </div>
+        </div>
+
+        <div class="tool-section">
+            <h2>Create Your Logo</h2>
+            <p class="tool-description">Describe your brand and let our AI create the perfect logo for you.</p>
+            
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+            {% endif %}
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label for="company_name">Company Name:</label>
+                    <input type="text" id="company_name" name="company_name" required 
+                           placeholder="Enter your company name">
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Logo Description:</label>
+                    <textarea id="description" name="description" required
+                             placeholder="Describe your ideal logo (e.g., modern, minimalist, colorful)"></textarea>
+                </div>
+
+                <button type="submit">Generate Logo</button>
+            </form>
+
+            <div class="console-box">
+                <div class="console-header">
+                    <span>Generation Progress</span>
+                    <button onclick="clearConsole()" class="clear-button">Clear</button>
+                </div>
+                <div id="console-output">
+                    {% if console_log %}
+                        {% for log in console_log %}
+                            <div class="log-entry">{{ log }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if image_data %}
+                <div class="result-container">
+                    <h2>Your Generated Logo</h2>
+                    <p class="success-message">Here's your custom logo for {{ company_name }}</p>
+                    <img src="data:image/png;base64,{{ image_data }}" alt="Generated Logo">
+                    <div class="action-buttons">
+                        <a href="data:image/png;base64,{{ image_data }}" download="logo.png" class="download-button">
+                            Download Logo
+                        </a>
+                        <button onclick="window.location.reload()" class="retry-button">
+                            Create Another
+                        </button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>© 2024 IconicInk. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 

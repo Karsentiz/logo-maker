@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logo Maker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Create Your Company Logo</h1>
+        
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="company_name">Company Name:</label>
+                <input type="text" id="company_name" name="company_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Company Description:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+
+            <button type="submit">Create Logo</button>
+        </form>
+
+        <div class="console-box">
+            <div class="console-header">
+                <span>Console Log</span>
+                <button onclick="clearConsole()" class="clear-button">Clear</button>
+            </div>
+            <div id="console-output">
+                {% if console_log %}
+                    {% for log in console_log %}
+                        <div class="log-entry">{{ log }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        {% if image_data %}
+            <div class="result-container">
+                <h2>Generated Logo for {{ company_name }}</h2>
+                <img src="data:image/png;base64,{{ image_data }}" alt="Generated Logo">
+                <a href="data:image/png;base64,{{ image_data }}" download="logo.png" class="download-button">
+                    Download Logo
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function clearConsole() {
+            document.getElementById('console-output').innerHTML = '';
+        }
+    </script>
+</body>
+</html> 
